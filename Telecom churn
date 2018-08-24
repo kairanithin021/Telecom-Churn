@@ -1,0 +1,1078 @@
+kaira@nithin:~$ ipython
+Python 3.6.5 |Anaconda, Inc.| (default, Apr 29 2018, 16:14:56) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: import pandas as pd
+
+In [2]: data=pd.read_csv('/home/kaira/Desktop/bigml_59c28831336c6604c800002a.csv')
+
+In [3]: data.head()
+Out[3]: 
+  state  account length  area code phone number  ...   total intl calls total intl charge  customer service calls  churn
+0    KS             128        415     382-4657  ...                  3              2.70                       1  False
+1    OH             107        415     371-7191  ...                  3              3.70                       1  False
+2    NJ             137        415     358-1921  ...                  5              3.29                       0  False
+3    OH              84        408     375-9999  ...                  7              1.78                       2  False
+4    OK              75        415     330-6626  ...                  3              2.73                       3  False
+
+[5 rows x 21 columns]
+
+In [4]: data.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 3333 entries, 0 to 3332
+Data columns (total 21 columns):
+state                     3333 non-null object
+account length            3333 non-null int64
+area code                 3333 non-null int64
+phone number              3333 non-null object
+international plan        3333 non-null object
+voice mail plan           3333 non-null object
+number vmail messages     3333 non-null int64
+total day minutes         3333 non-null float64
+total day calls           3333 non-null int64
+total day charge          3333 non-null float64
+total eve minutes         3333 non-null float64
+total eve calls           3333 non-null int64
+total eve charge          3333 non-null float64
+total night minutes       3333 non-null float64
+total night calls         3333 non-null int64
+total night charge        3333 non-null float64
+total intl minutes        3333 non-null float64
+total intl calls          3333 non-null int64
+total intl charge         3333 non-null float64
+customer service calls    3333 non-null int64
+churn                     3333 non-null bool
+dtypes: bool(1), float64(8), int64(8), object(4)
+memory usage: 524.1+ KB
+
+In [5]: data.drop(['state','phone number','voice mail plan','international plan'],axis=1,inplace=True)
+
+In [6]: data.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 3333 entries, 0 to 3332
+Data columns (total 17 columns):
+account length            3333 non-null int64
+area code                 3333 non-null int64
+number vmail messages     3333 non-null int64
+total day minutes         3333 non-null float64
+total day calls           3333 non-null int64
+total day charge          3333 non-null float64
+total eve minutes         3333 non-null float64
+total eve calls           3333 non-null int64
+total eve charge          3333 non-null float64
+total night minutes       3333 non-null float64
+total night calls         3333 non-null int64
+total night charge        3333 non-null float64
+total intl minutes        3333 non-null float64
+total intl calls          3333 non-null int64
+total intl charge         3333 non-null float64
+customer service calls    3333 non-null int64
+churn                     3333 non-null bool
+dtypes: bool(1), float64(8), int64(8)
+memory usage: 420.0 KB
+
+In [7]: data.dtypes
+Out[7]: 
+account length              int64
+area code                   int64
+number vmail messages       int64
+total day minutes         float64
+total day calls             int64
+total day charge          float64
+total eve minutes         float64
+total eve calls             int64
+total eve charge          float64
+total night minutes       float64
+total night calls           int64
+total night charge        float64
+total intl minutes        float64
+total intl calls            int64
+total intl charge         float64
+customer service calls      int64
+churn                        bool
+dtype: object
+
+In [8]: X=data.drop('churn',axis=1)
+
+In [9]: y=data['churn']
+
+In [10]: from sklearn.model_selection import train_test_split
+
+In [11]: X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=0,test_size=0.2)
+
+In [12]: from sklearn.ensemble import RandomForestClassifier
+
+In [13]: model=RandomForestClassifier
+
+In [14]: model=RandomForestClassifier()
+
+In [15]: model.fit(X_train,y_train)
+Out[15]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [16]: y_model=model.predict(X_test)
+
+In [17]: from sklearn.metrics import accuracy_score
+
+In [18]: accuracy_score(y_model,y_test)
+Out[18]: 0.9190404797601199
+
+In [19]: data.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 3333 entries, 0 to 3332
+Data columns (total 17 columns):
+account length            3333 non-null int64
+area code                 3333 non-null int64
+number vmail messages     3333 non-null int64
+total day minutes         3333 non-null float64
+total day calls           3333 non-null int64
+total day charge          3333 non-null float64
+total eve minutes         3333 non-null float64
+total eve calls           3333 non-null int64
+total eve charge          3333 non-null float64
+total night minutes       3333 non-null float64
+total night calls         3333 non-null int64
+total night charge        3333 non-null float64
+total intl minutes        3333 non-null float64
+total intl calls          3333 non-null int64
+total intl charge         3333 non-null float64
+customer service calls    3333 non-null int64
+churn                     3333 non-null bool
+dtypes: bool(1), float64(8), int64(8)
+memory usage: 420.0 KB
+
+In [20]: data.drop('area code',axis=1,inplace=True)
+
+In [21]: X=data.drop('churn',axis=1)
+
+In [22]: y=data['churn']
+
+In [23]: X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=0,test_size=0.2)
+
+In [24]: model.fit(X_train,y_train)
+Out[24]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [25]: y_model=model.predict(X_test)
+
+In [26]: accuracy_score(y_model,y_test)
+Out[26]: 0.9070464767616192
+
+In [27]: model.important_features_
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-27-2a1216202552> in <module>()
+----> 1 model.important_features_
+
+AttributeError: 'RandomForestClassifier' object has no attribute 'important_features_'
+
+In [28]: data=pd.read_csv('/home/kaira/Desktop/bigml_59c28831336c6604c800002a.csv')
+
+In [29]: data.head()
+Out[29]: 
+  state  account length  area code phone number  ...   total intl calls total intl charge  customer service calls  churn
+0    KS             128        415     382-4657  ...                  3              2.70                       1  False
+1    OH             107        415     371-7191  ...                  3              3.70                       1  False
+2    NJ             137        415     358-1921  ...                  5              3.29                       0  False
+3    OH              84        408     375-9999  ...                  7              1.78                       2  False
+4    OK              75        415     330-6626  ...                  3              2.73                       3  False
+
+[5 rows x 21 columns]
+
+In [30]: data.isnull().sum()
+Out[30]: 
+state                     0
+account length            0
+area code                 0
+phone number              0
+international plan        0
+voice mail plan           0
+number vmail messages     0
+total day minutes         0
+total day calls           0
+total day charge          0
+total eve minutes         0
+total eve calls           0
+total eve charge          0
+total night minutes       0
+total night calls         0
+total night charge        0
+total intl minutes        0
+total intl calls          0
+total intl charge         0
+customer service calls    0
+churn                     0
+dtype: int64
+
+In [31]: data.head()
+Out[31]: 
+  state  account length  area code phone number  ...   total intl calls total intl charge  customer service calls  churn
+0    KS             128        415     382-4657  ...                  3              2.70                       1  False
+1    OH             107        415     371-7191  ...                  3              3.70                       1  False
+2    NJ             137        415     358-1921  ...                  5              3.29                       0  False
+3    OH              84        408     375-9999  ...                  7              1.78                       2  False
+4    OK              75        415     330-6626  ...                  3              2.73                       3  False
+
+[5 rows x 21 columns]
+
+In [32]: data.drop(['state','phone number'],axis=1,inplace=True)
+
+In [33]: data.head()
+Out[33]: 
+   account length  area code international plan voice mail plan  ...    total intl calls  total intl charge  customer service calls  churn
+0             128        415                 no             yes  ...                   3               2.70                       1  False
+1             107        415                 no             yes  ...                   3               3.70                       1  False
+2             137        415                 no              no  ...                   5               3.29                       0  False
+3              84        408                yes              no  ...                   7               1.78                       2  False
+4              75        415                yes              no  ...                   3               2.73                       3  False
+
+[5 rows x 19 columns]
+
+In [34]: international_plan=pd.get_dummies(data['international plan'])
+
+In [35]: voice mail plan=pd.get_dummies(data['voice mail plan'])
+  File "<ipython-input-35-831921419624>", line 1
+    voice mail plan=pd.get_dummies(data['voice mail plan'])
+             ^
+SyntaxError: invalid syntax
+
+
+In [36]: voice_mail_plan=pd.get_dummies(data['voice mail plan'])
+
+In [37]: data1.data.copy()
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-37-d74f558e8890> in <module>()
+----> 1 data1.data.copy()
+
+NameError: name 'data1' is not defined
+
+In [38]: data1=data.copy()
+
+In [39]: data.drop(['international plan','voice mail plan'],axis=1,inplace=True)
+
+In [40]: data.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 3333 entries, 0 to 3332
+Data columns (total 17 columns):
+account length            3333 non-null int64
+area code                 3333 non-null int64
+number vmail messages     3333 non-null int64
+total day minutes         3333 non-null float64
+total day calls           3333 non-null int64
+total day charge          3333 non-null float64
+total eve minutes         3333 non-null float64
+total eve calls           3333 non-null int64
+total eve charge          3333 non-null float64
+total night minutes       3333 non-null float64
+total night calls         3333 non-null int64
+total night charge        3333 non-null float64
+total intl minutes        3333 non-null float64
+total intl calls          3333 non-null int64
+total intl charge         3333 non-null float64
+customer service calls    3333 non-null int64
+churn                     3333 non-null bool
+dtypes: bool(1), float64(8), int64(8)
+memory usage: 420.0 KB
+
+In [41]: X=data.drop('churn',axis=1)
+
+In [42]: data['churn']=data['churn'].map({False:0,True:1})
+
+In [43]: y=data['churn']
+
+In [44]: y
+Out[44]: 
+0       0
+1       0
+2       0
+3       0
+4       0
+5       0
+6       0
+7       0
+8       0
+9       0
+10      1
+11      0
+12      0
+13      0
+14      0
+15      1
+16      0
+17      0
+18      0
+19      0
+20      0
+21      1
+22      0
+23      0
+24      0
+25      0
+26      0
+27      0
+28      0
+29      0
+       ..
+3303    0
+3304    1
+3305    0
+3306    0
+3307    0
+3308    0
+3309    0
+3310    0
+3311    0
+3312    0
+3313    0
+3314    0
+3315    0
+3316    0
+3317    0
+3318    0
+3319    0
+3320    1
+3321    0
+3322    1
+3323    1
+3324    0
+3325    0
+3326    0
+3327    0
+3328    0
+3329    0
+3330    0
+3331    0
+3332    0
+Name: churn, Length: 3333, dtype: int64
+
+In [45]: X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=0,test_size=0.2)
+
+In [46]: model=RandomForestClassifier()
+
+In [47]: model.fit(X_train,y_train)
+Out[47]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [48]: y_model=model.predict(X_test)
+
+In [49]: accuracy_score(y_model,y_test)
+Out[49]: 0.9205397301349325
+
+In [50]: data=pd.concat(data,international_plan,voice_mail_plan)
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-50-18df23e63e36> in <module>()
+----> 1 data=pd.concat(data,international_plan,voice_mail_plan)
+
+~/.local/lib/python3.6/site-packages/pandas/core/reshape/concat.py in concat(objs, axis, join, join_axes, ignore_index, keys, levels, names, verify_integrity, sort, copy)
+    223                        keys=keys, levels=levels, names=names,
+    224                        verify_integrity=verify_integrity,
+--> 225                        copy=copy, sort=sort)
+    226     return op.get_result()
+    227 
+
+~/.local/lib/python3.6/site-packages/pandas/core/reshape/concat.py in __init__(self, objs, axis, join, join_axes, keys, levels, names, ignore_index, verify_integrity, copy, sort)
+    239             raise TypeError('first argument must be an iterable of pandas '
+    240                             'objects, you passed an object of type '
+--> 241                             '"{name}"'.format(name=type(objs).__name__))
+    242 
+    243         if join == 'outer':
+
+TypeError: first argument must be an iterable of pandas objects, you passed an object of type "DataFrame"
+
+In [51]: data=pd.concat(data,international_plan,voice_mail_plan,axis=1)
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-51-bb108e918dc4> in <module>()
+----> 1 data=pd.concat(data,international_plan,voice_mail_plan,axis=1)
+
+TypeError: concat() got multiple values for argument 'axis'
+
+In [52]: data=pd.concat([data,international_plan,voice_mail_plan],axis=1)
+
+In [53]: data.head()
+Out[53]: 
+   account length  area code  number vmail messages  total day minutes  total day calls ...   churn  no  yes  no  yes
+0             128        415                     25              265.1              110 ...       0   1    0   0    1
+1             107        415                     26              161.6              123 ...       0   1    0   0    1
+2             137        415                      0              243.4              114 ...       0   1    0   1    0
+3              84        408                      0              299.4               71 ...       0   0    1   1    0
+4              75        415                      0              166.7              113 ...       0   0    1   1    0
+
+[5 rows x 21 columns]
+
+In [54]: data.isnull().sum()
+Out[54]: 
+account length            0
+area code                 0
+number vmail messages     0
+total day minutes         0
+total day calls           0
+total day charge          0
+total eve minutes         0
+total eve calls           0
+total eve charge          0
+total night minutes       0
+total night calls         0
+total night charge        0
+total intl minutes        0
+total intl calls          0
+total intl charge         0
+customer service calls    0
+churn                     0
+no                        0
+yes                       0
+no                        0
+yes                       0
+dtype: int64
+
+In [55]: X=data.drop('churn',axis=1)
+
+In [56]: y=data['churn']
+
+In [57]: X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=0,test_size=0.2)
+
+In [58]: model.fit(X_train,y_train)
+Out[58]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [59]: y_model=model.predict(X_test)
+
+In [60]: accuracy_score(y_model,y_test)
+Out[60]: 0.9445277361319341
+
+In [61]: from sklearn.model_selection import RandomizedSearchCV
+
+In [62]: from sklearn.model_selection import GridSearchCV
+
+In [63]: grid=GridSearchCV()
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-63-708316927bf0> in <module>()
+----> 1 grid=GridSearchCV()
+
+TypeError: __init__() missing 2 required positional arguments: 'estimator' and 'param_grid'
+
+In [64]: import numpy as np
+
+In [65]: n_estimators=[int(x) for x in np.linspace(200,2000,10)]
+
+In [66]: max_features=['auto','sqrt','log2']
+
+In [67]: data.shape
+Out[67]: (3333, 21)
+
+In [68]: max_depth=[int(x) for x in np.linspace(5,21,1)]
+
+In [69]: model
+Out[69]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [70]: random_grid={'n_estimators':n_estimators,'max_features':max_features,'max_depth':max_depth}
+
+In [71]: rf_random=RandomizedSearchCV(estimator=model,param_distributions=random_grid)
+
+In [72]: rf_random
+Out[72]: 
+RandomizedSearchCV(cv=None, error_score='raise',
+          estimator=RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False),
+          fit_params=None, iid=True, n_iter=10, n_jobs=1,
+          param_distributions={'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000], 'max_features': ['auto', 'sqrt', 'log2'], 'max_depth': [5]},
+          pre_dispatch='2*n_jobs', random_state=None, refit=True,
+          return_train_score='warn', scoring=None, verbose=0)
+
+In [73]: rf_random.fit(X_train,y_train)
+Out[73]: 
+RandomizedSearchCV(cv=None, error_score='raise',
+          estimator=RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False),
+          fit_params=None, iid=True, n_iter=10, n_jobs=1,
+          param_distributions={'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000], 'max_features': ['auto', 'sqrt', 'log2'], 'max_depth': [5]},
+          pre_dispatch='2*n_jobs', random_state=None, refit=True,
+          return_train_score='warn', scoring=None, verbose=0)
+
+In [74]: rf_random.best_params_
+Out[74]: {'n_estimators': 600, 'max_features': 'log2', 'max_depth': 5}
+
+In [75]: max_depth
+Out[75]: [5]
+
+In [76]: np.linspace(5,21,1)
+Out[76]: array([5.])
+
+In [77]: np.linspace(5,21,2)
+Out[77]: array([ 5., 21.])
+
+In [78]: np.linspace(5,21,8)
+Out[78]: 
+array([ 5.        ,  7.28571429,  9.57142857, 11.85714286, 14.14285714,
+       16.42857143, 18.71428571, 21.        ])
+
+In [79]: n_estimators=[int(x) for x in np.arange(200,2000,10)]
+
+In [80]: n_estimators
+Out[80]: 
+[200,
+ 210,
+ 220,
+ 230,
+ 240,
+ 250,
+ 260,
+ 270,
+ 280,
+ 290,
+ 300,
+ 310,
+ 320,
+ 330,
+ 340,
+ 350,
+ 360,
+ 370,
+ 380,
+ 390,
+ 400,
+ 410,
+ 420,
+ 430,
+ 440,
+ 450,
+ 460,
+ 470,
+ 480,
+ 490,
+ 500,
+ 510,
+ 520,
+ 530,
+ 540,
+ 550,
+ 560,
+ 570,
+ 580,
+ 590,
+ 600,
+ 610,
+ 620,
+ 630,
+ 640,
+ 650,
+ 660,
+ 670,
+ 680,
+ 690,
+ 700,
+ 710,
+ 720,
+ 730,
+ 740,
+ 750,
+ 760,
+ 770,
+ 780,
+ 790,
+ 800,
+ 810,
+ 820,
+ 830,
+ 840,
+ 850,
+ 860,
+ 870,
+ 880,
+ 890,
+ 900,
+ 910,
+ 920,
+ 930,
+ 940,
+ 950,
+ 960,
+ 970,
+ 980,
+ 990,
+ 1000,
+ 1010,
+ 1020,
+ 1030,
+ 1040,
+ 1050,
+ 1060,
+ 1070,
+ 1080,
+ 1090,
+ 1100,
+ 1110,
+ 1120,
+ 1130,
+ 1140,
+ 1150,
+ 1160,
+ 1170,
+ 1180,
+ 1190,
+ 1200,
+ 1210,
+ 1220,
+ 1230,
+ 1240,
+ 1250,
+ 1260,
+ 1270,
+ 1280,
+ 1290,
+ 1300,
+ 1310,
+ 1320,
+ 1330,
+ 1340,
+ 1350,
+ 1360,
+ 1370,
+ 1380,
+ 1390,
+ 1400,
+ 1410,
+ 1420,
+ 1430,
+ 1440,
+ 1450,
+ 1460,
+ 1470,
+ 1480,
+ 1490,
+ 1500,
+ 1510,
+ 1520,
+ 1530,
+ 1540,
+ 1550,
+ 1560,
+ 1570,
+ 1580,
+ 1590,
+ 1600,
+ 1610,
+ 1620,
+ 1630,
+ 1640,
+ 1650,
+ 1660,
+ 1670,
+ 1680,
+ 1690,
+ 1700,
+ 1710,
+ 1720,
+ 1730,
+ 1740,
+ 1750,
+ 1760,
+ 1770,
+ 1780,
+ 1790,
+ 1800,
+ 1810,
+ 1820,
+ 1830,
+ 1840,
+ 1850,
+ 1860,
+ 1870,
+ 1880,
+ 1890,
+ 1900,
+ 1910,
+ 1920,
+ 1930,
+ 1940,
+ 1950,
+ 1960,
+ 1970,
+ 1980,
+ 1990]
+
+In [81]: max_depth=[int(x) for x in np.arange(5,21,1)]
+
+In [82]: random_grid={'n_estimators':n_estimators,'max_features':max_features,'max_depth':max_depth}
+
+In [83]: rf_random=RandomizedSearchCV(estimator=model,param_distributions=random_grid)
+
+In [84]: rf_random.fit(X_train,y_train)
+^C---------------------------------------------------------------------------
+KeyboardInterrupt                         Traceback (most recent call last)
+<ipython-input-84-1fbfdc3ce0bc> in <module>()
+----> 1 rf_random.fit(X_train,y_train)
+
+~/python/lib/python3.6/site-packages/sklearn/model_selection/_search.py in fit(self, X, y, groups, **fit_params)
+    637                                   error_score=self.error_score)
+    638           for parameters, (train, test) in product(candidate_params,
+--> 639                                                    cv.split(X, y, groups)))
+    640 
+    641         # if one choose to see train score, "out" will contain train score info
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in __call__(self, iterable)
+    777             # was dispatched. In particular this covers the edge
+    778             # case of Parallel used with an exhausted iterator.
+--> 779             while self.dispatch_one_batch(iterator):
+    780                 self._iterating = True
+    781             else:
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in dispatch_one_batch(self, iterator)
+    623                 return False
+    624             else:
+--> 625                 self._dispatch(tasks)
+    626                 return True
+    627 
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in _dispatch(self, batch)
+    586         dispatch_timestamp = time.time()
+    587         cb = BatchCompletionCallBack(dispatch_timestamp, len(batch), self)
+--> 588         job = self._backend.apply_async(batch, callback=cb)
+    589         self._jobs.append(job)
+    590 
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/_parallel_backends.py in apply_async(self, func, callback)
+    109     def apply_async(self, func, callback=None):
+    110         """Schedule a func to be run"""
+--> 111         result = ImmediateResult(func)
+    112         if callback:
+    113             callback(result)
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/_parallel_backends.py in __init__(self, batch)
+    330         # Don't delay the application, to avoid keeping the input
+    331         # arguments in memory
+--> 332         self.results = batch()
+    333 
+    334     def get(self):
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in __call__(self)
+    129 
+    130     def __call__(self):
+--> 131         return [func(*args, **kwargs) for func, args, kwargs in self.items]
+    132 
+    133     def __len__(self):
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in <listcomp>(.0)
+    129 
+    130     def __call__(self):
+--> 131         return [func(*args, **kwargs) for func, args, kwargs in self.items]
+    132 
+    133     def __len__(self):
+
+~/python/lib/python3.6/site-packages/sklearn/model_selection/_validation.py in _fit_and_score(estimator, X, y, scorer, train, test, verbose, parameters, fit_params, return_train_score, return_parameters, return_n_test_samples, return_times, error_score)
+    456             estimator.fit(X_train, **fit_params)
+    457         else:
+--> 458             estimator.fit(X_train, y_train, **fit_params)
+    459 
+    460     except Exception as e:
+
+~/python/lib/python3.6/site-packages/sklearn/ensemble/forest.py in fit(self, X, y, sample_weight)
+    326                     t, self, X, y, sample_weight, i, len(trees),
+    327                     verbose=self.verbose, class_weight=self.class_weight)
+--> 328                 for i, t in enumerate(trees))
+    329 
+    330             # Collect newly grown trees
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in __call__(self, iterable)
+    777             # was dispatched. In particular this covers the edge
+    778             # case of Parallel used with an exhausted iterator.
+--> 779             while self.dispatch_one_batch(iterator):
+    780                 self._iterating = True
+    781             else:
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in dispatch_one_batch(self, iterator)
+    623                 return False
+    624             else:
+--> 625                 self._dispatch(tasks)
+    626                 return True
+    627 
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in _dispatch(self, batch)
+    586         dispatch_timestamp = time.time()
+    587         cb = BatchCompletionCallBack(dispatch_timestamp, len(batch), self)
+--> 588         job = self._backend.apply_async(batch, callback=cb)
+    589         self._jobs.append(job)
+    590 
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/_parallel_backends.py in apply_async(self, func, callback)
+    109     def apply_async(self, func, callback=None):
+    110         """Schedule a func to be run"""
+--> 111         result = ImmediateResult(func)
+    112         if callback:
+    113             callback(result)
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/_parallel_backends.py in __init__(self, batch)
+    330         # Don't delay the application, to avoid keeping the input
+    331         # arguments in memory
+--> 332         self.results = batch()
+    333 
+    334     def get(self):
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in __call__(self)
+    129 
+    130     def __call__(self):
+--> 131         return [func(*args, **kwargs) for func, args, kwargs in self.items]
+    132 
+    133     def __len__(self):
+
+~/python/lib/python3.6/site-packages/sklearn/externals/joblib/parallel.py in <listcomp>(.0)
+    129 
+    130     def __call__(self):
+--> 131         return [func(*args, **kwargs) for func, args, kwargs in self.items]
+    132 
+    133     def __len__(self):
+
+~/python/lib/python3.6/site-packages/sklearn/ensemble/forest.py in _parallel_build_trees(tree, forest, X, y, sample_weight, tree_idx, n_trees, verbose, class_weight)
+    119             curr_sample_weight *= compute_sample_weight('balanced', y, indices)
+    120 
+--> 121         tree.fit(X, y, sample_weight=curr_sample_weight, check_input=False)
+    122     else:
+    123         tree.fit(X, y, sample_weight=sample_weight, check_input=False)
+
+~/python/lib/python3.6/site-packages/sklearn/tree/tree.py in fit(self, X, y, sample_weight, check_input, X_idx_sorted)
+    788             sample_weight=sample_weight,
+    789             check_input=check_input,
+--> 790             X_idx_sorted=X_idx_sorted)
+    791         return self
+    792 
+
+~/python/lib/python3.6/site-packages/sklearn/tree/tree.py in fit(self, X, y, sample_weight, check_input, X_idx_sorted)
+    360                                            min_impurity_split)
+    361 
+--> 362         builder.build(self.tree_, X, y, sample_weight, X_idx_sorted)
+    363 
+    364         if self.n_outputs_ == 1:
+
+KeyboardInterrupt: 
+
+In [85]: max_depth=[int(x) for x in np.arange(5,21,3)]
+
+In [86]: n_estimators=[int(x) for x in np.arange(200,2000,100)]
+
+In [87]: random_grid={'n_estimators':n_estimators,'max_features':max_features,'max_depth':max_depth}
+
+In [88]: rf_random=RandomizedSearchCV(estimator=model,param_distributions=random_grid)
+
+In [89]: rf_random.fit(X_train,y_train)
+Out[89]: 
+RandomizedSearchCV(cv=None, error_score='raise',
+          estimator=RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False),
+          fit_params=None, iid=True, n_iter=10, n_jobs=1,
+          param_distributions={'n_estimators': [200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900], 'max_features': ['auto', 'sqrt', 'log2'], 'max_depth': [5, 8, 11, 14, 17, 20]},
+          pre_dispatch='2*n_jobs', random_state=None, refit=True,
+          return_train_score='warn', scoring=None, verbose=0)
+
+In [90]: rf_random.best_params_
+Out[90]: {'n_estimators': 200, 'max_features': 'log2', 'max_depth': 11}
+
+In [91]: n_estimators
+Out[91]: 
+[200,
+ 300,
+ 400,
+ 500,
+ 600,
+ 700,
+ 800,
+ 900,
+ 1000,
+ 1100,
+ 1200,
+ 1300,
+ 1400,
+ 1500,
+ 1600,
+ 1700,
+ 1800,
+ 1900]
+
+In [92]: model=RandomForestClassifier()
+
+In [93]: model.fit(X_train,y_train)
+Out[93]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [94]: y_model=model.predict(X_test)
+
+In [95]: accuracy_score(y_model,y_test)
+Out[95]: 0.9505247376311844
+
+In [96]: data.head()
+Out[96]: 
+   account length  area code  number vmail messages  total day minutes  total day calls ...   churn  no  yes  no  yes
+0             128        415                     25              265.1              110 ...       0   1    0   0    1
+1             107        415                     26              161.6              123 ...       0   1    0   0    1
+2             137        415                      0              243.4              114 ...       0   1    0   1    0
+3              84        408                      0              299.4               71 ...       0   0    1   1    0
+4              75        415                      0              166.7              113 ...       0   0    1   1    0
+
+[5 rows x 21 columns]
+
+In [97]: model
+Out[97]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [98]: model=RandomForestClassifier(n_estimators=200,max_features='log2',max_depth=11)
+
+In [99]: model.fit(X_train,y_train)
+Out[99]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=11, max_features='log2', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=200, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [100]: y_model=model.predict(X_test)
+
+In [101]: accuracy_score(y_model,y_test)
+Out[101]: 0.95952023988006
+
+In [102]: model=RandomForestClassifier(n_estimators=600,max_features='log2',max_depth=11)
+
+In [103]: model.fit(X_train,y_train)
+Out[103]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=11, max_features='log2', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=600, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [104]: y_model=model.predict(X_test)
+
+In [105]: accuracy_score(y_model,y_test)
+Out[105]: 0.9610194902548725
+
+In [106]: model=RandomForestClassifier(n_estimators=800,max_features='log2',max_depth=11)
+
+In [107]: y_model=model.predict(X_test)
+---------------------------------------------------------------------------
+NotFittedError                            Traceback (most recent call last)
+<ipython-input-107-07aed559a5dc> in <module>()
+----> 1 y_model=model.predict(X_test)
+
+~/python/lib/python3.6/site-packages/sklearn/ensemble/forest.py in predict(self, X)
+    536             The predicted classes.
+    537         """
+--> 538         proba = self.predict_proba(X)
+    539 
+    540         if self.n_outputs_ == 1:
+
+~/python/lib/python3.6/site-packages/sklearn/ensemble/forest.py in predict_proba(self, X)
+    574             classes corresponds to that in the attribute `classes_`.
+    575         """
+--> 576         check_is_fitted(self, 'estimators_')
+    577         # Check data
+    578         X = self._validate_X_predict(X)
+
+~/python/lib/python3.6/site-packages/sklearn/utils/validation.py in check_is_fitted(estimator, attributes, msg, all_or_any)
+    766 
+    767     if not all_or_any([hasattr(estimator, attr) for attr in attributes]):
+--> 768         raise NotFittedError(msg % {'name': type(estimator).__name__})
+    769 
+    770 
+
+NotFittedError: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this method.
+
+In [108]: model=RandomForestClassifier(n_estimators=800,max_features='log2',max_depth=11)
+
+In [109]: model.fit(X_train,y_train)
+Out[109]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=11, max_features='log2', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=800, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [110]: y_model=model.predict(X_test)
+
+In [111]: accuracy_score(y_model,y_test)
+Out[111]: 0.9610194902548725
+
+In [112]: model=RandomForestClassifier(n_estimators=600,max_features='auto',max_depth=11)
+
+In [113]: model.fit(X_train,y_train)
+Out[113]: 
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=11, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=600, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+In [114]: y_model=model.predict(X_test)
+
+In [115]: accuracy_score(y_model,y_test)
+Out[115]: 0.9610194902548725
+
+In [116]: 
+
